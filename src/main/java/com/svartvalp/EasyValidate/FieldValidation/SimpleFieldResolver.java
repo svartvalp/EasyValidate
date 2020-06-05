@@ -13,6 +13,9 @@ public class SimpleFieldResolver implements FieldResolver {
             allFields.addAll(getClassFields(currentClass));
             currentClass = currentClass.getSuperclass();
         }
+        for(var field : allFields) {
+            field.setAccessible(true);
+        }
         return allFields.toArray(Field[]::new);
     }
 

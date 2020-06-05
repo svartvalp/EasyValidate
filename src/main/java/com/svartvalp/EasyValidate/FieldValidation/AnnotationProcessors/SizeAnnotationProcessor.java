@@ -1,4 +1,4 @@
-package com.svartvalp.EasyValidate.FieldValidation.Size;
+package com.svartvalp.EasyValidate.FieldValidation.AnnotationProcessors;
 
 import com.svartvalp.EasyValidate.Exceptions.FieldNotSupportedTypeException;
 import com.svartvalp.EasyValidate.FieldValidation.FieldValidationError;
@@ -12,9 +12,15 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 
-class SizeAnnotationProcessor {
 
+public class SizeAnnotationProcessor {
 
+    /*
+     * supports all types, which support @Size annotation (javax.validation.constraints)
+     *  @param field - field to validate
+     * @param object - object to validate
+     * @throws FieldNotSupportedTypeException
+     */
     public ValidationResult validate(Field field, Object object) {
         var annotation = field.getAnnotation(Size.class);
         int min = annotation.min();
@@ -23,6 +29,9 @@ class SizeAnnotationProcessor {
         Object fieldToValidate = null;
         try {
             fieldToValidate = field.get(object);
+            if(fieldToValidate == null) {
+                return new FieldValidationResult();
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -45,11 +54,11 @@ class SizeAnnotationProcessor {
             throw new FieldNotSupportedTypeException(field.getName());
         }
         List<ValidationError> errors = new ArrayList<>();
-        if(size >= max) {
-            errors.add(new FieldValidationError(field.getName(), " must be less than " + max));
+        if(size > max) {
+            errors.add(new FieldValidationError(field.getName(), " must be less than or equal " + max));
         }
-        if(size <= min) {
-            errors.add(new FieldValidationError(field.getName(), " must be more than " + min));
+        if(size < min) {
+            errors.add(new FieldValidationError(field.getName(), " must be more than or equal " + min));
         }
         if(errors.size() == 0)
             return new FieldValidationResult();
