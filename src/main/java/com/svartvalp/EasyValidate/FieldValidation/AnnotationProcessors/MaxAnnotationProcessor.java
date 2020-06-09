@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 
-public class MaxAnnotationProcessor {
+public class MaxAnnotationProcessor implements AnnotationProcessor {
     public ValidationResult validate(Field field, Object object) {
         Class<?> clazz = field.getType();
         var max = field.getAnnotation(Max.class).value();

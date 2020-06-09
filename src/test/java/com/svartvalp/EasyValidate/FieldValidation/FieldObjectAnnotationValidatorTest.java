@@ -23,9 +23,10 @@ class FieldObjectAnnotationValidatorTest {
         TestSubClass testSubClass = new TestSubClass();
         testSubClass.setFive(new int[10]);
         testSubClass.setOne(100);
+        testSubClass.setFour(false);
         var result = fieldObjectAnnotationValidator.validate(testSubClass);
-        result.getValidationErrors().stream().forEach((error) -> System.out.println(error.getMessage()));
-        assertEquals(2, result.getValidationErrors().size());
+        result.getValidationErrors().forEach((error) -> System.out.println(error.getMessage()));
+        assertEquals(4, result.getValidationErrors().size());
         assertFalse(result.isValid());
     }
 

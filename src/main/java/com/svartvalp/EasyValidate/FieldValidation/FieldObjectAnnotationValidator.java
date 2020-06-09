@@ -1,14 +1,10 @@
 package com.svartvalp.EasyValidate.FieldValidation;
 
-import com.svartvalp.EasyValidate.FieldValidation.AnnotationProcessors.MaxAnnotationProcessor;
-import com.svartvalp.EasyValidate.FieldValidation.AnnotationProcessors.MinAnnotationProcessor;
-import com.svartvalp.EasyValidate.FieldValidation.AnnotationProcessors.SizeAnnotationProcessor;
+import com.svartvalp.EasyValidate.FieldValidation.AnnotationProcessors.*;
 import com.svartvalp.EasyValidate.ValidationResult;
 import com.svartvalp.EasyValidate.ObjectValidator;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +20,8 @@ public class FieldObjectAnnotationValidator implements ObjectValidator {
     SizeAnnotationProcessor sizeAnnotationProcessor = new SizeAnnotationProcessor();
     MinAnnotationProcessor minAnnotationProcessor = new MinAnnotationProcessor();
     MaxAnnotationProcessor maxAnnotationProcessor = new MaxAnnotationProcessor();
+    NotNullAndNullAnnotationProcessor notNullAndNullAnnotationProcessor = new NotNullAndNullAnnotationProcessor();
+    AssertFalseAndAssertTrueAnnotationProcessor assertFalseAndAssertTrueAnnotationProcessor = new AssertFalseAndAssertTrueAnnotationProcessor();
 
     public FieldObjectAnnotationValidator() {
     }
@@ -64,6 +62,12 @@ public class FieldObjectAnnotationValidator implements ObjectValidator {
                }
                if(field.getAnnotation(Max.class) != null) {
                    results.add(maxAnnotationProcessor.validate(field, object));
+               }
+               if(field.getAnnotation(NotNull.class) != null || field.getAnnotation(Null.class) != null) {
+                   results.add(notNullAndNullAnnotationProcessor.validate(field, object));
+               }
+               if(field.getAnnotation(AssertTrue.class) != null || field.getAnnotation(AssertFalse.class) != null) {
+                   results.add(assertFalseAndAssertTrueAnnotationProcessor.validate(field, object));
                }
            }
         }

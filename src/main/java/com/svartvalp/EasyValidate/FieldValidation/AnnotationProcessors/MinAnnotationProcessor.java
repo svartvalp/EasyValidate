@@ -23,7 +23,7 @@ import java.util.List;
 
 
 
-public class MinAnnotationProcessor {
+public class MinAnnotationProcessor implements AnnotationProcessor {
     public ValidationResult validate(Field field, Object object) {
         Class<?> clazz = field.getType();
         var min = field.getAnnotation(Min.class).value();

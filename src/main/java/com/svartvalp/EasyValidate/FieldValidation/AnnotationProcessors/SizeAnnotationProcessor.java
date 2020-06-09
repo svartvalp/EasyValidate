@@ -13,7 +13,7 @@ import java.util.*;
 
 
 
-public class SizeAnnotationProcessor {
+public class SizeAnnotationProcessor implements AnnotationProcessor {
 
     /*
      * supports all types, which support @Size annotation (javax.validation.constraints)
