@@ -1,6 +1,6 @@
 package com.svartvalp.EasyValidate;
 
-public interface ObjectValidator {
+public interface FieldObjectValidator {
     public ValidationResult validate(Object object, String... fields);
 
 }

@@ -2,7 +2,7 @@ package com.svartvalp.EasyValidate.FieldValidation;
 
 import com.svartvalp.EasyValidate.FieldValidation.AnnotationProcessors.*;
 import com.svartvalp.EasyValidate.ValidationResult;
-import com.svartvalp.EasyValidate.ObjectValidator;
+import com.svartvalp.EasyValidate.FieldObjectValidator;
 
 import javax.validation.constraints.*;
 import java.lang.reflect.Field;
@@ -10,11 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /* Class used for validation object by annotations from javax.validation.constraints.
- * You can specify, which fields to validate by using field names.
+ * You can specify which fields to validate by using field names.
  */
 
 
-public class FieldObjectAnnotationValidator implements ObjectValidator {
+public class FieldObjectAnnotationValidator implements FieldObjectValidator {
 
     FieldResolver fieldResolver = new SimpleFieldResolver();
     SizeAnnotationProcessor sizeAnnotationProcessor = new SizeAnnotationProcessor();
@@ -22,8 +22,21 @@ public class FieldObjectAnnotationValidator implements ObjectValidator {
     MaxAnnotationProcessor maxAnnotationProcessor = new MaxAnnotationProcessor();
     NotNullAndNullAnnotationProcessor notNullAndNullAnnotationProcessor = new NotNullAndNullAnnotationProcessor();
     AssertFalseAndAssertTrueAnnotationProcessor assertFalseAndAssertTrueAnnotationProcessor = new AssertFalseAndAssertTrueAnnotationProcessor();
+    PatternAnnotationProcessor patternAnnotationProcessor = new PatternAnnotationProcessor();
 
     public FieldObjectAnnotationValidator() {
+    }
+
+    public void setNotNullAndNullAnnotationProcessor(NotNullAndNullAnnotationProcessor notNullAndNullAnnotationProcessor) {
+        this.notNullAndNullAnnotationProcessor = notNullAndNullAnnotationProcessor;
+    }
+
+    public void setAssertFalseAndAssertTrueAnnotationProcessor(AssertFalseAndAssertTrueAnnotationProcessor assertFalseAndAssertTrueAnnotationProcessor) {
+        this.assertFalseAndAssertTrueAnnotationProcessor = assertFalseAndAssertTrueAnnotationProcessor;
+    }
+
+    public void setPatternAnnotationProcessor(PatternAnnotationProcessor patternAnnotationProcessor) {
+        this.patternAnnotationProcessor = patternAnnotationProcessor;
     }
 
     public void setFieldResolver(FieldResolver fieldResolver) {
@@ -68,6 +81,9 @@ public class FieldObjectAnnotationValidator implements ObjectValidator {
                }
                if(field.getAnnotation(AssertTrue.class) != null || field.getAnnotation(AssertFalse.class) != null) {
                    results.add(assertFalseAndAssertTrueAnnotationProcessor.validate(field, object));
+               }
+               if(field.getAnnotation(Pattern.class) != null) {
+                   results.add(patternAnnotationProcessor.validate(field, object));
                }
            }
         }

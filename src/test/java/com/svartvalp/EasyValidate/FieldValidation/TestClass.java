@@ -2,11 +2,13 @@ package com.svartvalp.EasyValidate.FieldValidation;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class TestClass extends TestBaseClass {
     @Size(min = 1)
     @NotNull
+    @Pattern(regexp = "[a-zA-Z]+")
     private String three;
     @AssertTrue
     private Boolean four;
