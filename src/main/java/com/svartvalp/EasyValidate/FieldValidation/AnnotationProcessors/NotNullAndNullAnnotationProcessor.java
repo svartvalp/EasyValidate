@@ -35,7 +35,7 @@ public class NotNullAndNullAnnotationProcessor implements AnnotationProcessor {
             if(nullAnnotation != null) {
                 if(value != null) {
                     return new FieldValidationResult(false,
-                            List.of(new FieldValidationError(field.getName(), " must be null")));
+                            List.of(new FieldValidationError(field.getName()," must be null")));
                 }
             }
             return new FieldValidationResult();

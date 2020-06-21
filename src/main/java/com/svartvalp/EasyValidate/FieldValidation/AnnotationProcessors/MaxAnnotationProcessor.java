@@ -11,6 +11,7 @@ import javax.validation.constraints.Min;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.LinkedList;
 import java.util.List;
 
 /*
@@ -25,7 +26,22 @@ import java.util.List;
 public class MaxAnnotationProcessor implements AnnotationProcessor {
     public ValidationResult validate(Field field, Object object) {
         Class<?> clazz = field.getType();
-        var max = field.getAnnotation(Max.class).value();
+        var maxList = field.getAnnotation(Max.List.class);
+        if(maxList != null) {
+            List<FieldValidationResult> results = new LinkedList<>();
+            for(var annotation : maxList.value()) {
+                results.add(validateAnnotation(field, object, annotation));
+            }
+            return new FieldValidationResult(results.toArray(FieldValidationResult[]::new));
+        }
+        var annotation = field.getAnnotation(Max.class);
+       return validateAnnotation(field, object, annotation);
+    }
+
+
+    private FieldValidationResult validateAnnotation(Field field, Object object, Max annotation) {
+        Class<?> clazz = field.getType();
+        var max = annotation.value();
         try {
             if (Integer.class.equals(clazz) || int.class.equals(clazz)) {
                 int value = field.getInt(object);
@@ -78,9 +94,11 @@ public class MaxAnnotationProcessor implements AnnotationProcessor {
     }
 
 
-    private FieldValidationResult getResultWithError(Field field, long min) {
+
+
+    private FieldValidationResult getResultWithError(Field field, long maxValue) {
         FieldValidationError error = new FieldValidationError(field.getName(),
-                "must be less or equal than " + min);
+                "must be less or equal than " + maxValue);
         return new FieldValidationResult(false, List.of(error));
     }
 }

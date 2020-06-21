@@ -1,5 +1,6 @@
 package com.svartvalp.EasyValidate.FieldValidation.AnnotationProcessors;
 
+import com.svartvalp.EasyValidate.FieldValidation.FieldValidationResult;
 import com.svartvalp.EasyValidate.ValidationResult;
 
 import java.lang.reflect.Field;

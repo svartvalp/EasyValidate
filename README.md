@@ -14,4 +14,5 @@ SomeClass someClass = new SomeClass();
 someClass.setValue(new int[3]);
 ObjectValidator validator = new FieldObjectAnnotationValidator();
 var result = validator.validate(someClass);
+System.out.println(result.isValid());
 ```

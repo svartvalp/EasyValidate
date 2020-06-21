@@ -19,6 +19,14 @@ public class FieldValidationResult implements ValidationResult {
         this.errors = errors;
     }
 
+    public FieldValidationResult(List<FieldValidationResult> results) {
+        errors = new LinkedList<>();
+        isValid = results.stream().map(result -> {
+            errors.addAll(result.getValidationErrors());
+            return result.isValid();
+        }).reduce((a,b) -> a && b).orElse(true);
+    }
+
     public FieldValidationResult() {
         isValid = true;
         errors = new LinkedList<>();
@@ -29,7 +37,7 @@ public class FieldValidationResult implements ValidationResult {
         isValid = Stream.of(results).map(fieldValidationResult -> {
             errors.addAll(fieldValidationResult.getValidationErrors());
             return fieldValidationResult.isValid();
-        }).reduce((a,b) -> a && b).orElseGet( () -> true);
+        }).reduce((a,b) -> a && b).orElse( true);
     }
 
     public boolean isValid() {

@@ -6,6 +6,7 @@ import com.svartvalp.EasyValidate.FieldValidation.FieldValidationResult;
 import com.svartvalp.EasyValidate.ValidationError;
 import com.svartvalp.EasyValidate.ValidationResult;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -22,7 +23,19 @@ public class SizeAnnotationProcessor implements AnnotationProcessor {
      * @throws FieldNotSupportedTypeException
      */
     public ValidationResult validate(Field field, Object object) {
+        var listAnnotation = field.getAnnotation(Size.List.class);
+        if(listAnnotation != null) {
+            List<FieldValidationResult> results = new LinkedList<>();
+            for(var annotation : listAnnotation.value()) {
+                results.add(validateAnnotation(field,object,annotation));
+            }
+            return new FieldValidationResult(results);
+        }
         var annotation = field.getAnnotation(Size.class);
+        return validateAnnotation(field,object,annotation);
+    }
+
+    private FieldValidationResult validateAnnotation(Field field, Object object, Size annotation) {
         int min = annotation.min();
         int max = annotation.max();
         field.setAccessible(true);
@@ -64,6 +77,7 @@ public class SizeAnnotationProcessor implements AnnotationProcessor {
             return new FieldValidationResult();
         return new FieldValidationResult(false, errors);
     }
+
 
 
 
