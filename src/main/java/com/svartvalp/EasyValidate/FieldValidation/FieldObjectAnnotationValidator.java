@@ -23,8 +23,18 @@ public class FieldObjectAnnotationValidator implements FieldObjectValidator {
     NotNullAndNullAnnotationProcessor notNullAndNullAnnotationProcessor = new NotNullAndNullAnnotationProcessor();
     AssertFalseAndAssertTrueAnnotationProcessor assertFalseAndAssertTrueAnnotationProcessor = new AssertFalseAndAssertTrueAnnotationProcessor();
     PatternAnnotationProcessor patternAnnotationProcessor = new PatternAnnotationProcessor();
+    EmailAnnotationProcessor emailAnnotationProcessor = new EmailAnnotationProcessor();
+    NotEmptyAnnotationProcessor notEmptyAnnotationProcessor = new NotEmptyAnnotationProcessor();
 
     public FieldObjectAnnotationValidator() {
+    }
+
+    public void setNotEmptyAnnotationProcessor(NotEmptyAnnotationProcessor notEmptyAnnotationProcessor) {
+        this.notEmptyAnnotationProcessor = notEmptyAnnotationProcessor;
+    }
+
+    public void setEmailAnnotationProcessor(EmailAnnotationProcessor emailAnnotationProcessor) {
+        this.emailAnnotationProcessor = emailAnnotationProcessor;
     }
 
     public void setNotNullAndNullAnnotationProcessor(NotNullAndNullAnnotationProcessor notNullAndNullAnnotationProcessor) {
@@ -84,6 +94,12 @@ public class FieldObjectAnnotationValidator implements FieldObjectValidator {
                }
                if(field.getAnnotation(Pattern.class) != null) {
                    results.add(patternAnnotationProcessor.validate(field, object));
+               }
+               if(field.getAnnotation(Email.class) != null) {
+                   results.add(emailAnnotationProcessor.validate(field, object));
+               }
+               if(field.getAnnotation(NotEmpty.class) != null) {
+                   results.add(notEmptyAnnotationProcessor.validate(field,object));
                }
            }
         }

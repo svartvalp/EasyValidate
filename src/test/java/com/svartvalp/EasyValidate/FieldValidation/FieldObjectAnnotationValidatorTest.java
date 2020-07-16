@@ -21,12 +21,12 @@ class FieldObjectAnnotationValidatorTest {
     void validateTestEmptyFieldNameList() {
         var fieldObjectAnnotationValidator = new FieldObjectAnnotationValidator();
         TestSubClass testSubClass = new TestSubClass();
-        testSubClass.setFive(new int[10]);
+        testSubClass.setFive(new int[0]);
         testSubClass.setOne(100);
         testSubClass.setFour(false);
         var result = fieldObjectAnnotationValidator.validate(testSubClass);
         result.getValidationErrors().forEach((error) -> System.out.println(error.getMessage()));
-        assertEquals(4, result.getValidationErrors().size());
+        assertEquals(5, result.getValidationErrors().size());
         assertFalse(result.isValid());
     }
 
